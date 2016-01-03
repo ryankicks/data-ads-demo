@@ -3,7 +3,7 @@ body {
 }
 
 .navbar {
-  background-color:rgba(64, 153, 255, 0.02)
+  background-color:#00ACED;
 }
 
 div.container div.main {
@@ -29,8 +29,8 @@ div.container div.main {
 	box-shadow: 2px 2px 2px #999;
 }
 
-.top-buffer { 
-	margin-top:80px; 
+.top-buffer {
+	margin-top:80px;
 }
 
 blockquote img {
