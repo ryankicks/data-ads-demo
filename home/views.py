@@ -14,18 +14,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 
-from social.apps.django_app.default.models import UserSocialAuth
-
-from gnip_search.gnip_search_api import GnipSearchAPI
-from gnip_search.gnip_search_api import QueryError as GNIPQueryError
 # import twitter
-KEYWORD_RELEVANCE_THRESHOLD = .1    # Only show related terms if > 10%
-TWEET_QUERY_COUNT = 10              # For real identification, > 100. Max of 500 via Search API.
-DEFAULT_TIMEFRAME = 90              # When not specified or needed to constrain, this # of days lookback
-TIMEDELTA_DEFAULT_TIMEFRAME = datetime.timedelta(days=DEFAULT_TIMEFRAME)
-TIMEDELTA_DEFAULT_30 = datetime.timedelta(days=30)
-DATE_FORMAT = "%Y-%m-%d %H:%M"
-DATE_FORMAT_JSON = "%Y-%m-%dT%H:%M:%S"
 
 def login(request):
     """
