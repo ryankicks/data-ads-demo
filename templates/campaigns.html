@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load tags %}
+{% load humanize %}
+
+{% block title %}Ads Accounts{% endblock %}
+
+{% block content %}
+<div class="row">
+  <h4><a href="accounts">Ads Account</a> > Campaigns </h4>
+
+  <!-- Setup Table to consume Ads Api -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Id</th>
+      </tr>
+    </thead>
+    <tbody class="table-data">
+    </tbody>
+  </table>
+</div>
+<script>
+$(document).ready(function () {
+    $.getJSON("../ads/api/campaigns?account_id={{ account_id }}",
+    function (json) {
+        var tr;
+        for (var i = 0; i < json["campaigns"].length; i++) {
+            tr = $('<tr/>');
+            var campaign_id = json["campaigns"][i].id
+            tr.append("<td><a href='line_items?account_id=" + json["account_id"] + "&campaign_id=" + campaign_id + "'>" + json["campaigns"][i].name + "</a></td>");
+            tr.append("<td>" + campaign_id + "</td>");
+            $('.table').append(tr);
+        }
+    });
+});
+</script>
+{% endblock %}

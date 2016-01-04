@@ -9,13 +9,7 @@
 <div class="row">
 <div class="col-md-offset-2 col-md-8">
 
-	<div id="buffer">
-		<div class="top-buffer">
-			&nbsp;
-		</div>
-	</div>
-	
-	<div class="row top-buffer">
+	<div class="row">
 	  <div class="col-md-10">
     	<input type="text" class="form-control query-input" name="query0" id="query0" placeholder="(Walking Dead) OR #WalkingDead OR #TheWalkingDead has:media" value="{{query1}}">
 
@@ -27,7 +21,7 @@
         		</button>
       		</span>
   		</div>
-  		
+
 	    <div class="input-group query-input query-add" id="query2_holder">
 		    <input type="text" class="form-control query-input" name="query2" id="query2" placeholder="(Walking Dead) OR #WalkingDead OR #TheWalkingDead has:media" value="{{query3}}">
 	        <span class="input-group-btn">
@@ -45,10 +39,10 @@
 				</button>
       		</span>
   		</div>
-  		
+
 	    <p class="help-block pull-right small">
 	    	<a href="#" id="queryAdd">add query</a>
-	    	| 
+	    	|
 	    	<a href="#" data-toggle="collapse" data-target="#collapseOptions">advanced options</a>
     	</p>
 	  </div>
@@ -75,7 +69,7 @@
 		      <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
 		    </div>
 		  </div>
-		  
+
 		  <div class="form-group form-group-sm">
 		    <label for="inputPassword3" class="col-sm-3 control-label">Filter</label>
 		    <div class="col-sm-3">
@@ -101,7 +95,7 @@
 		      </div>
 		    </div>
 		  </div>
-		  
+
 		  <div class="form-group form-group-sm">
 		    <div class="col-md-offset-3 col-sm-8 input-group date datetimepicker">
           	    <p class="help-block">For advanced query syntax, read the <a href="http://support.gnip.com/apis/powertrack/rules.html" target="_target">GNIP Search API Reference</a>.</p>
@@ -109,7 +103,7 @@
 		  </div>
 
 		  <hr>
-		  
+
 		  <div class="form-group form-group-sm">
 		    <label for="inputPassword3" class="col-sm-3 control-label">Results</label>
 		    <div class="col-sm-3">
@@ -126,7 +120,7 @@
 		      </select>
 		    </div>
 		  </div>
-			
+
 		  <div class="form-group form-group-sm">
 		    <label for="inputPassword3" class="col-sm-3 control-label"></label>
 		    <div class="col-sm-3">
@@ -151,7 +145,7 @@
 		      </div>
 		    </div>
 		  </div>
-			
+
 		  <div class="form-group form-group-sm">
 		    <label for="inputPassword3" class="col-sm-3 control-label"></label>
 		    <div class="col-sm-3">
@@ -177,19 +171,19 @@
 <div class="col-md-offset-1 col-md-10">
 
 	<div id="activity_volume">
-	
+
 	<h3>Activity Volume</h3>
-	
+
 	<p class="help-block">Tweet count: <span id="total"></span></p>
-	
+
 	<div class="row volume">
-	
+
 		<div class="col-md-12">
 			<div id="chart">Please select a data source and click "Submit".</div>
 		</div>
-	
+
 	</div>
-	
+
 	</div>
 
 </div>
@@ -226,13 +220,16 @@
 		<th>Activities %</th>
 		</tr>
 	</table>
-		
+	<!--<button class="btn" id="ads-button">Export to Ads</button>-->
 </div>
 </div>
-		
+
 <div id="frequency_loading" class="loading"><img src="{{STATIC_URL}}/images/spinner.gif"></div>
 
 <br><br><br>
+
+<!-- Request for specific script for home aka data -->
+<script src="{{STATIC_URL}}js/script.js"></script>
 
 {% verbatim %}
 <script id="templateTweet" type="text/template">
@@ -261,8 +258,8 @@
 	<td>{{activityPercent}}</td>
 </tr>
 </script>
-{% endverbatim %}
 
+{% endverbatim %}
 <script language="JavaScript1.2">
 
 window.twttr = (function(d, s, id) {
@@ -273,12 +270,12 @@ window.twttr = (function(d, s, id) {
   js.id = id;
   js.src = "https://platform.twitter.com/widgets.js";
   fjs.parentNode.insertBefore(js, fjs);
- 
+
   t._e = [];
   t.ready = function(f) {
     t._e.push(f);
   };
- 
+
   return t;
 }(document, "script", "twitter-wjs"));
 
@@ -288,6 +285,15 @@ $('#tweets').pinterest_grid({
 	padding_y: 10,
 	margin_bottom: 50,
 	single_column_breakpoint: 700
+});
+
+// Setup Ads Integration
+$("#ads-button").click(function() {
+	var checkedVals = $('.term:checkbox:checked').map(function() {
+	    return this.value;
+	}).get();
+	// SEND HTTP REQUEST //
+	//alert(checkedVals.join(","));
 });
 
 var query0 = "{{query0}}";
