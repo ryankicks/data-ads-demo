@@ -7,6 +7,28 @@ from django.conf import settings
 from twitter_ads.client import Client
 
 @login_required
+def new_targeting(request):
+    """
+    Creates a new
+    """
+    line_item_id = request.REQUEST.get("line_item_id", "")
+    account_id = request.REQUEST.get("account_id", "")
+    targeting_value = request.REQUEST.get("targeting_value");
+    targeting_type = "BROAD_KEYWORD"
+
+    client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+    account = client.accounts(account_id)
+
+    targeting_criteria = TargetingCriteria(account)
+    targeting_criteria.line_item_id = line_item.id
+    targeting_criteria.targeting_type = targeting_type
+    targeting_criteria.targeting_value = targeting_value
+    targeting_criteria.save()
+
+    return HttpResponse(json.dumps({"account_id": account_id, "line_item_id": line_item_id, "targeting_value": targeting_value}), content_type="application/json")
+
+
+@login_required
 def json_handler(request):
     """
     Returns json_data {"campaigns": [campaign_list} for given request
