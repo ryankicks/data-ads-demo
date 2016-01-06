@@ -14,6 +14,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 
+MAX_AGE = getattr(settings, 'CACHE_CONTROL_MAX_AGE', 2592000)
+
 # import twitter
 
 def login(request):
@@ -45,8 +47,9 @@ def query_chart(request):
         queries = [query]
 
     response_chart = Chart(queries = queries, request=request).data
-
-    return HttpResponse(json.dumps(response_chart), content_type="application/json")
+    response = HttpResponse(json.dumps(response_chart), content_type="application/json")
+    response['Cache-Control'] = 'max-age=%d' % MAX_AGE
+    return response
 
 @login_required
 def query_frequency(request):
@@ -65,7 +68,9 @@ def query_frequency(request):
                               end = request_timeframe.end)
         response_data["frequency"] = data.freq
         response_data["sample"] = sample
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    response = HttpResponse(json.dumps(response_data), content_type="application/json")
+    response['Cache-Control'] = 'max-age=%d' % MAX_AGE
+    return response
 
 @login_required
 def query_tweets(request):
@@ -95,7 +100,9 @@ def query_tweets(request):
             return response
     else:
         response_data['tweets'] = tweets.get_data()
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    response = HttpResponse(json.dumps(response_data), content_type="application/json")
+    response['Cache-Control'] = 'max-age=%d' % MAX_AGE
+    return response
 
 def handle_query_error(e):
     """
