@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-__author__="Scott Hendrickson, Josh Montague" 
+__author__="Scott Hendrickson, Josh Montague"
 
 import sys
 import requests
@@ -22,7 +22,7 @@ reload(sys)
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
-# formatter of data from API 
+# formatter of data from API
 TIME_FMT = "%Y%m%d%H%M"
 PAUSE = 3 # seconds between page requests
 
@@ -31,10 +31,10 @@ PAUSE = 3 # seconds between page requests
 DATE_INDEX = 1
 TEXT_INDEX = 2
 LINKS_INDEX = 3
-USER_NAME_INDEX = 7 
+USER_NAME_INDEX = 7
 
 class GnipSearchAPI(object):
-    
+
     def __init__(self
             , user
             , password
@@ -74,12 +74,12 @@ class GnipSearchAPI(object):
         elif use_case.startswith("link"):
             self.index = LINKS_INDEX
         elif use_case.startswith("time"):
-            if not self.stream_url.endswith("counts.json"): 
+            if not self.stream_url.endswith("counts.json"):
                 self.stream_url = self.stream_url[:-5] + "/counts.json"
             if count_bucket not in ['day', 'minute', 'hour']:
                 print >> sys.stderr, "Error. Invalid count bucket: %s \n"%str(count_bucket)
                 sys.exit()
-        
+
     def set_dates(self, start, end):
         # re for the acceptable datetime formats
         timeRE = re.compile("([0-9]{4}).([0-9]{2}).([0-9]{2}).([0-9]{2}):([0-9]{2})")
@@ -87,11 +87,11 @@ class GnipSearchAPI(object):
             dt = re.search(timeRE, start)
             if not dt:
                 print >> sys.stderr, "Error. Invalid start-date format: %s \n"%str(start)
-                sys.exit()    
+                sys.exit()
             else:
                 f =''
                 for i in range(re.compile(timeRE).groups):
-                    f += dt.group(i+1) 
+                    f += dt.group(i+1)
                 self.fromDate = f
         if end:
             dt = re.search(timeRE, end)
@@ -101,7 +101,7 @@ class GnipSearchAPI(object):
             else:
                 e =''
                 for i in range(re.compile(timeRE).groups):
-                    e += dt.group(i+1) 
+                    e += dt.group(i+1)
                 self.toDate = e
 
     def name_munger(self, f):
@@ -109,8 +109,8 @@ class GnipSearchAPI(object):
         f = re.sub(' +','_',f)
         f = f.replace(':','_')
         f = f.replace('"','_Q_')
-        f = f.replace('(','_p_') 
-        f = f.replace(')','_p_') 
+        f = f.replace('(','_p_')
+        f = f.replace(')','_p_')
         self.file_name_prefix = f[:42]
 
     def req(self):
@@ -184,7 +184,7 @@ class GnipSearchAPI(object):
             , use_case = "wordcount"
             , start = None
             , end = None
-            , count_bucket = "day" 
+            , count_bucket = "day"
             , csv_flag = False
             , query = False):
         self.set_index(use_case, count_bucket)
@@ -193,15 +193,15 @@ class GnipSearchAPI(object):
         if self.paged:
             # avoid making many small requests
             max_results = 500
-        self.rule_payload = { 'query': pt_filter }
-        
-        # 30 DAY: to use 30 day search, replace the above line with the below updated rule payload                                                                
+        self.rule_payload = { 'query': pt_filter, 'publisher': 'twitter' }
+
+        # 30 DAY: to use 30 day search, replace the above line with the below updated rule payload
         # self.rule_payload = {
-        #             'query': pt_filter,            
+        #             'query': pt_filter,
         #             'maxResults': int(max_results),
         #             'publisher': 'twitter'
         #            }
-        
+
         if start:
             self.rule_payload["fromDate"] = self.fromDate
         if end:
@@ -211,13 +211,13 @@ class GnipSearchAPI(object):
         if query:
             print >>sys.stderr, "API query:"
             print >>sys.stderr, self.rule_payload
-            sys.exit() 
-            
+            sys.exit()
+
         print self.rule_payload
 
         self.doc = []
         self.res_cnt = 0
-        self.delta_t = 1    # keeps non-'rate' use-cases from crashing 
+        self.delta_t = 1    # keeps non-'rate' use-cases from crashing
         # default delta_t = 30d & search only goes back 30 days
         self.oldest_t = datetime.datetime.utcnow() - datetime.timedelta(days=30)
         self.newest_t = datetime.datetime.utcnow()
@@ -304,10 +304,10 @@ class GnipSearchAPI(object):
                 res = ["{:%Y-%m-%dT%H:%M:%S},{}".format(
                     datetime.datetime.strptime(x["timePeriod"]
                   , TIME_FMT)
-                  , x["count"]) 
+                  , x["count"])
                         for x in self.doc]
             else:
-                res = [json.dumps({"results": self.doc})] 
+                res = [json.dumps({"results": self.doc})]
         else:
             res[-1]+=u"-"*WIDTH
             res.append("%100s -- %10s     %8s (%d)"%("links", "mentions", "activities", self.res_cnt))
@@ -316,14 +316,14 @@ class GnipSearchAPI(object):
                 res.append("%100s -- %4d  %5.2f%% %4d  %5.2f%%"%(x[4], x[0], x[1]*100., x[2], x[3]*100.))
             res.append("-"*WIDTH)
         return "\n".join(res)
-    
+
 class QueryError(Exception):
-    
+
     def __init__(self, message, payload, response):
         self.message = message
         self.payload = payload
         self.response = response
-        
+
     def __str__(self):
         return repr("%s (%s, %s)" % (self.message, self.payload, self.response))
 
@@ -332,9 +332,9 @@ if __name__ == "__main__":
             , "PASSWORD"
             , "STREAM_URL",
             )
-    
+
     term = "captain america"
-    
+
     print g.query_api(term)
     print g.query_api(term, 50)
     print g.query_api(term, 10, "json")
