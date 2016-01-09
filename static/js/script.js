@@ -166,7 +166,26 @@ var Page = {
 		$(id).hide();
 		$(id).find("input").val("");
 	},
-
+	createAudiece: function() {
+		NProgress.start();
+		var singleQuery = true;
+		var firstQuery = $("#query0").val();
+		if (query0) {
+			NProgres.inc();
+			var start = $("#start").val();
+			var end = $("#end").val();
+			Page.clear();
+			$('#buffer').collapse('hide');
+			var queries = [query0];
+			for (var i = 1; i < Page.maxQueries; i++){
+				var query = $("#query" + i).val();
+				if (query){
+					queries.push(query);
+					singleQuery = false;
+				}
+			}
+		}
+	},
 	search : function(){
 
 		Page.hideError();
@@ -362,9 +381,38 @@ var Page = {
 				}
 			});
 
-	},
+	},	newAudience : function(query, start, end, embedCount) {
+			 NProgress.inc();
+			 data = {"query" : query, "start": start, "end": end, "embedCount": embedCount, "export": "ta"};
+			 url = "/query/tweets?" + Utils.qs(data);
 
-	loadTweets : function(query, start, end, embedCount) {
+			 //window.open(url);
+			 $.ajax({
+				 type : "GET",
+				 url : "/query/tweets",
+				 data : {"query" : query, "start": start, "end": end, "embedCount": embedCount},
+				 dataType : "json",
+				 success : function(response) {
+					 // Do something with the succesful TON API Call e.g. save the TON API URL
+					 // Retrieve an item from LocalStore (our db storage) TODO: change this at some point to hit a db.
+					 var audienceList = localStorage.getItem("audienceList");
+					 if audienceList != null {
+						 var json_list = JSON.parse(audienceList);
+						 json_list.push(response['location'])
+						 localStorage.setItem("audienceList", JSON.stringify(json_list))
+					 }
+
+					 // Let the user know that Audience Has been Created
+					 // Display some div
+					 NProgress.done();
+				 },
+				 error : function(xhr, errorType, exception) {
+					 Page.handleError(xhr, errorType, exception);
+				 }
+			 });
+
+
+	},  loadTweets : function(query, start, end, embedCount) {
 		 NProgress.inc();
 		 $("#tweets_loading").show();
 		 var video = $("#video").is(':checked');
@@ -375,9 +423,6 @@ var Page = {
 				data : {"query" : query, "start": start, "end": end, "embedCount": embedCount},
 				dataType : "json",
 				success : function(response) {
-
-//					console.log(response);
-
 					template = $("#templateTweet").html();
 					Mustache.parse(template);
 
