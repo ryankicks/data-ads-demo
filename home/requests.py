@@ -71,8 +71,6 @@ class GNIP:
         if (not_rt not in query_nrt):
             query_nrt = query_nrt.replace("is:retweet", "")
             query_nrt = "%s %s" % (query_nrt, not_rt)
-        if self.query_count > 500:
-            g.paged = True
         tweets = None
         try:
             tweets = self.api().query_api(query_nrt, self.query_count, use_case="tweets", start=self.timeframe.start.strftime(self.DATE_FORMAT), end=self.timeframe.end.strftime(self.DATE_FORMAT))

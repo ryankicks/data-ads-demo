@@ -2,6 +2,9 @@ import datetime
 import random
 import csv
 import json
+import StringIO
+
+from app import ton
 
 from chart import Chart
 from timeframe import Timeframe
@@ -68,7 +71,7 @@ def query_frequency(request):
                               end = request_timeframe.end)
         response_data["frequency"] = data.freq
         response_data["sample"] = sample
-    response = HttpResponse(json.dumps(response_data), content_type="application/json")
+        response = HttpResponse(json.dumps(response_data), content_type="application/json")
     response['Cache-Control'] = 'max-age=%d' % MAX_AGE
     return response
 
@@ -77,13 +80,30 @@ def query_tweets(request):
     """
     Returns tweet query
     """
-    query_count = int(request.REQUEST.get("embedCount", TWEET_QUERY_COUNT))
+    query_count = 10000#int(request.REQUEST.get("embedCount", TWEET_QUERY_COUNT))
     export = request.REQUEST.get("export", None)
     query = request.REQUEST.get("query", "")
     tweets = Tweets(query=query, query_count=query_count, request=request)
 
     response_data = {}
-    if export == "csv":
+
+    if export == "ta":
+
+        output = StringIO.StringIO()
+        for t in tweets.get_data():
+            user_id = t['actor']['id']
+            output.write(user_id + '\n')
+        ton_request = ton.TwitterTon(twitter_consumer_key='sw5evtqO3gbh0yZceH1B6gGR4',
+                             twitter_consumer_secret='VJSyKC6HTp9JwbF3x7LUYEPmdQ2UTGlUw4fJkUIqkTBmho85UC',
+                             access_token='15313098-4TwY1wIlWpQO90Is0cNKCr774V8yCEjCgoepfTyMX',
+                             access_token_secret='cP44KHGZ8NzHN0HWNGbY69kPAXpjjyAKs4jXKLXdidpE4')
+        ton_response = ton_request.upload_data(payload=output.getvalue())
+        output.close()
+        location = ton_response['location']
+        response = HttpResponse(json.dumps({"location": location}), content_type="application/json")
+        return response
+        
+    elif export == "csv":
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="export.csv"'
         writer = csv.writer(response)
@@ -100,9 +120,9 @@ def query_tweets(request):
             return response
     else:
         response_data['tweets'] = tweets.get_data()
-    response = HttpResponse(json.dumps(response_data), content_type="application/json")
-    response['Cache-Control'] = 'max-age=%d' % MAX_AGE
-    return response
+        response = HttpResponse(json.dumps(response_data), content_type="application/json")
+        response['Cache-Control'] = 'max-age=%d' % MAX_AGE
+        return response
 
 def handle_query_error(e):
     """
