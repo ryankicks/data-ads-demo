@@ -88,21 +88,20 @@ def query_tweets(request):
     response_data = {}
 
     if export == "ta":
-
         output = StringIO.StringIO()
         for t in tweets.get_data():
             user_id = t['actor']['id']
             output.write(user_id + '\n')
-        ton_request = ton.TwitterTon(twitter_consumer_key='sw5evtqO3gbh0yZceH1B6gGR4',
-                             twitter_consumer_secret='VJSyKC6HTp9JwbF3x7LUYEPmdQ2UTGlUw4fJkUIqkTBmho85UC',
-                             access_token='15313098-4TwY1wIlWpQO90Is0cNKCr774V8yCEjCgoepfTyMX',
-                             access_token_secret='cP44KHGZ8NzHN0HWNGbY69kPAXpjjyAKs4jXKLXdidpE4')
+        ton_request = ton.TwitterTon(twitter_consumer_key=settings.SOCIAL_AUTH_TWITTER_KEY,
+                             twitter_consumer_secret=settings.SOCIAL_AUTH_TWITTER_SECRET,
+                             access_token=settings.TWITTER_ACCESS_TOKEN,
+                             access_token_secret=settings.TWITTER_ACCESS_TOKEN_SECRET)
         ton_response = ton_request.upload_data(payload=output.getvalue())
         output.close()
         location = ton_response['location']
-        response = HttpResponse(json.dumps({"location": location}), content_type="application/json")
+        response = HttpResponse(json.dumps({"location": location, "query": query}), content_type="application/json")
         return response
-        
+
     elif export == "csv":
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="export.csv"'
