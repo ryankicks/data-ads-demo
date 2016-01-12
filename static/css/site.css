@@ -19,10 +19,10 @@ body {
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
-    left: 100px;
+    left: 150px;
     width: 0;
     height: 100%;
-    margin-left: -100px;
+    margin-left: -150px;
     margin-top:25px;
     overflow-y: auto;
     background: #000;
@@ -51,7 +51,7 @@ body {
 .sidebar-nav {
     position: absolute;
     top: 0;
-    width: 100px;
+    width: 150px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -96,7 +96,7 @@ body {
 
 @media(min-width:768px) {
     #wrapper {
-        padding-left: 100px;
+        padding-left: 150px;
     }
 
     #wrapper.toggled {
@@ -104,7 +104,7 @@ body {
     }
 
     #sidebar-wrapper {
-        width: 100px;
+        width: 150px;
     }
 
     #wrapper.toggled #sidebar-wrapper {
@@ -149,7 +149,7 @@ body {
   left: 0;
 
   width: 100%;
-  height: 2px;
+  height: 5px;
 }
 
 /* Fancy blur effect */

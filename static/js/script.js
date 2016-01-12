@@ -88,6 +88,11 @@ var Page = {
 
 		});
 
+		$(".create-audience").on("click", function(){
+			console.log("audience clicked");
+			Page.createAudience();
+		});
+
 		$('#media').on("click", function(){
 			Page.toggleTerm("(has:media)", $(this).is(':checked'), false);
 		});
@@ -166,14 +171,17 @@ var Page = {
 		$(id).hide();
 		$(id).find("input").val("");
 	},
-	createAudiece: function() {
+	createAudience: function() {
+		console.log("createAudience called");
 		NProgress.start();
 		var singleQuery = true;
-		var firstQuery = $("#query0").val();
+		var query0 = $("#query0").val();
 		if (query0) {
-			NProgres.inc();
+			NProgress.inc();
 			var start = $("#start").val();
 			var end = $("#end").val();
+			var embedCount = $("#embedCount").val();
+
 			Page.clear();
 			$('#buffer').collapse('hide');
 			var queries = [query0];
@@ -184,7 +192,20 @@ var Page = {
 					singleQuery = false;
 				}
 			}
+
+			var queryMashup = "(" + query0 + ")";
+			for (var i = 1; i < queries.length; i++){
+				if (queries[i]){
+					queryMashup = queryMashup + " OR (" + queries[i] + ")"
+				}
+			}
+
+			// Send Request to Create New Audience
+			console.log("createAudience");
+			Page.newAudience(queryMashup, start, end, embedCount)
 		}
+
+
 	},
 	search : function(){
 
@@ -390,16 +411,18 @@ var Page = {
 			 $.ajax({
 				 type : "GET",
 				 url : "/query/tweets",
-				 data : {"query" : query, "start": start, "end": end, "embedCount": embedCount},
+				 data : {"query" : query, "start": start, "end": end, "embedCount": embedCount, "export": "ta"},
 				 dataType : "json",
 				 success : function(response) {
 					 // Do something with the succesful TON API Call e.g. save the TON API URL
 					 // Retrieve an item from LocalStore (our db storage) TODO: change this at some point to hit a db.
 					 var audienceList = localStorage.getItem("audienceList");
-					 if audienceList != null {
+					 if (audienceList != null) {
 						 var json_list = JSON.parse(audienceList);
-						 json_list.push(response['location'])
+						 json_list.push(response)
 						 localStorage.setItem("audienceList", JSON.stringify(json_list))
+					 } else {
+						 localStorage.setItem("audienceList", JSON.stringify([response]))
 					 }
 
 					 // Let the user know that Audience Has been Created
