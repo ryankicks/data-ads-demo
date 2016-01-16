@@ -27,6 +27,31 @@ def new_targeting(request):
 
     return HttpResponse(json.dumps({"account_id": account_id, "line_item_id": line_item_id, "targeting_value": targeting_value}), content_type="application/json")
 
+@login_required
+def new(request):
+    """
+    Returns a new campaign
+    """
+    client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+    account_id = request.REQUEST.get("account_id", "")
+    campaign_id = request.REQUEST.get("campaign_id", "")
+    name = request.REQUEST.get("name", "")
+    budget = request.REQUEST.get("budget", "")
+    account = client.accounts(account_id)
+
+    # create your campaign
+    line_item = LineItem(account)
+    line_item.campaign_id = campaign.id
+    line_item.name = name
+    line_item.product_type = PRODUCT.PROMOTED_TWEETS
+    line_item.placements = [PLACEMENT.ALL_ON_TWITTER]
+    line_item.objective = OBJECTIVE.TWEET_ENGAGEMENTS
+    line_item.bid_amount_local_micro = 10000
+    line_item.paused = True
+    line_item.save()
+
+    json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 @login_required
 def json_handler(request):
