@@ -24,6 +24,30 @@ def json_handler(request):
         campaign_list.append({"name": name, "id": identifier})
     return HttpResponse(json.dumps({"account_id": account_id, "campaigns": campaign_list}), content_type="application/json")
 
+
+@login_required
+def new(request):
+    """
+    Returns a new campaign
+    """
+    client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+    account_id = request.REQUEST.get("account_id", "")
+    campaign_name = request.REQUEST.get("campaign", "")
+    daily_budget = request.REQUEST.get("daily_budget", "")
+    account = client.accounts(account_id)
+    # create your campaign
+    campaign = Campaign(account)
+    campaign.funding_instrument_id = account.funding_instruments().next().id
+    campaign.daily_budget_amount_local_micro = daily_budget
+    campaign.name = campaign_name
+    campaign.paused = True
+    campaign.start_time = datetime.datetime.utcnow()
+    campaign.save()
+
+    json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+
 @login_required
 def handler(request):
     """
