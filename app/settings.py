@@ -137,5 +137,3 @@ TWITTER_ACCESS_TOKEN_SECRET = environ.get('ACCESS_TOKEN_SECRET')    # Twitter AP
 GNIP_USERNAME = environ.get('GNIP_USERNAME')                         # Gnip username
 GNIP_PASSWORD = environ.get('GNIP_PASSWORD')                         # Gnip password
 GNIP_SEARCH_ENDPOINT = environ.get('GNIP_SEARCH_ENDPOINT')                  # Gnip search endpoint
-
-
