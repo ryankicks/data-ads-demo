@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^ads/line_items', 'home.lineitems.handler', name='ads_line_items'),
     url(r'^ads/api/line_items', 'home.lineitems.json_handler', name='ads_api_line_items'),
     url(r'^ads/api/targeting/new', 'home.lineitems.new_targeting', name='ads_api_new_targeting'),
+    # Audiences
+    url(r'^ads/audiences', 'home.audiences.handler', name='ads_audiences'),
 
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^admin/', include(admin.site.urls)),
