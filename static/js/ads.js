@@ -7,16 +7,19 @@ function setup(){
   $(".ads-lineitems").hide();
   $(".ads-targeting").hide();
 }
+
 // get the accountList
 function getAccounts(){
-  $.getJSON("../ads/api/accounts",
+  $.getJSON("../../ads/api/accounts",
   function (json) {
     localStorage.setItem("adsAccounts", JSON.stringify(json["accounts"]));
   });
 }
 
+// Now setup
 setup();
 
+// List out the accounts from the Ads API
 function listAccounts(){
   var accountList = JSON.parse(localStorage.getItem("adsAccounts"))
   $(accountList).each(function( index ) {
@@ -26,19 +29,50 @@ function listAccounts(){
   $(".ads-api-account").click(function(e) {
     e.preventDefault();
     var accountId = $(this).data("id");
-    getCampaigns(accountId)
-    // remove Ads Tools
-    $(".ads-accounts").hide();
-    $(".ads-api-account").remove();
-    // Setup Campaigns
-    $(".ads-campaigns").show();
-    getCampaigns();
+
+    // if audiences
+    if (page == "AUDIENCE"){
+      // Upload to TA
+      var name = escape(localStorage.getItem("selected_bucket_name"));
+      newTA(accountId, name)
+
+    }
+      getCampaigns(accountId)
+      // remove Ads Tools
+      $(".ads-accounts").hide();
+      $(".ads-api-account").remove();
+      // Setup Campaigns
+      $(".ads-campaigns").show();
+  });
+}
+
+// Create a new placeholder for a "new" TA
+function newTA(account_id, name){
+  console.log("newTA called");
+  $.getJSON("../../ads/api/audiences/new?account_id=" + account_id + "&name=" + name,
+  function (json) {
+    console.log("received json");
+    // setId to localStorage
+    localStorage.setItem("selected_ta_list_id", json['id'])
+    // Send new HTTP request to upload location of targetable data
+    var ta_id = json["id"];
+    mapBucket(account_id, ta_id, escape(localStorage.getItem("selected_bucket_id")))
+  });
+
+}
+
+// Map the bucket to the placeholder
+function mapBucket(account_id, id, input_file_path){
+  console.log("mapBucket called");
+  $.getJSON("../../ads/api/audiences/change?account_id=" + account_id + "&id=" + id + "&input_file_path=" + input_file_path,
+  function (json) {
+    console.log(json);
   });
 }
 
 // get the campaignList
 function getCampaigns(account_id){
-  $.getJSON("../ads/api/campaigns?account_id=" + account_id,
+  $.getJSON("../../ads/api/campaigns?account_id=" + account_id,
   function (json) {
     $(json["campaigns"]).each(function( index ) {
       var campaign = json["campaigns"][index]
@@ -60,7 +94,7 @@ function getCampaigns(account_id){
 
 // get the lineItems
 function getLineItems(account_id, campaign_id){
-  $.getJSON("../ads/api/line_items?account_id=" + account_id + "&campaign_id=" + campaign_id,
+  $.getJSON("../../ads/api/line_items?account_id=" + account_id + "&campaign_id=" + campaign_id,
   function (json) {
 
     $(json["line_items"]).each(function( index ) {
@@ -73,13 +107,25 @@ function getLineItems(account_id, campaign_id){
       $(".ads-lineitems").hide();
       $(".ads-api-lineitem").remove();
       $(".ads-targeting").show();
-      getTargetingCriteria(account_id, campaign_id, $(this).data("id"));
+      if (page == "AUDIENCE") {
+        setTATargeting(account_id, campaign_id, $(this).data("id"));
+      } else {
+        getTargetingCriteria(account_id, campaign_id, $(this).data("id"));
+      }
     });
   });
 }
 
+// set TargetingCriteria
+function setTATargeting(account_id, campaign_id, line_item_id){
+  // for each value send http request to create a targeting criteria
+  $.getJSON("../../ads/api/targeting/new?account_id=" + account_id + "&line_item_id=" + line_item_id + "&targeting_value=" +  localStorage.getItem("selected_ta_list_id") + "&targeting_type=TAILORED_AUDIENCE",
+  function (json) {
+    console.log(json);
+  });
+}
 
-
+// Get the targeting criteria to a dropdown to target
 function getTargetingCriteria(account_id, campaign_id, line_item_id){
   $(".ads-add-targeting").click(function(e) {
     setTargetingCriteria(account_id, campaign_id, line_item_id);
