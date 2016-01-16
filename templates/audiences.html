@@ -9,11 +9,12 @@
   <h4><a href=".../ads/audiences">Audiences</a></h4>
 
   <!-- Setup Table to consume Ads Api -->
-  <table class="table">
+  <table class="table" style="width:80%">
     <thead>
       <tr>
         <th>Audience Bucket</th>
         <th>Search Query</th>
+        <th></th>
       </tr>
     </thead>
     <tbody class="table-data">
@@ -22,7 +23,6 @@
 </div>
 <script>
 $(document).ready(function () {
-
   var audienceList = localStorage.getItem("audienceList");
   if (audienceList != null) {
     var json_list = JSON.parse(audienceList);
@@ -31,9 +31,18 @@ $(document).ready(function () {
         tr = $('<tr/>');
         tr.append("<td>" + item["location"] + "</td>");
         tr.append("<td>" + item["query"] + "</td>");
+        tr.append("<td><button class='ta btn btn-danger' data-id='" + item['location'] + "'>Target Audience</button>")
         $(".table").append(tr);
     }
   }
+  $(".ta").on("click", function(){
+    var bucket_location = $(this).data("id");
+    // Set bucket to local storage and then send the user a modal
+    localStorage.setItem("selected_bucket") = bucket_location
+  });
 });
+
+
 </script>
+
 {% endblock %}
