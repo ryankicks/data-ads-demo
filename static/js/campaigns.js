@@ -19,8 +19,6 @@ $(document).ready(function () {
 });
 
 // create new campaign
-
-
 function createCampaign(account_id, campaign, daily_budget){
   $.getJSON("../../ads/api/campaign/new?account_id=" + account_id + "&campaign=" + campaign + "&daily_budget=" + daily_budget,
   function (json) {
