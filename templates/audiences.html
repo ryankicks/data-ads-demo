@@ -15,6 +15,7 @@
         <th>Audience Bucket</th>
         <th>Search Query</th>
         <th></th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody class="table-data">
@@ -22,6 +23,7 @@
   </table>
 </div>
 <script>
+<<<<<<< HEAD
 $(document).ready(function () {
   var audienceList = localStorage.getItem("audienceList");
   if (audienceList != null) {
@@ -35,10 +37,67 @@ $(document).ready(function () {
         $(".table").append(tr);
     }
   }
-  $(".ta").on("click", function(){
+}
+
+
+function displayAudiences(){
+
+  $(".table-data").html("");
+
+  var audienceList = localStorage.getItem("audienceList");
+  if (audienceList != null) {
+
+    var json_list = JSON.parse(audienceList);
+    for (var i=0; i < json_list.length; i++) {
+        var item = json_list[i];
+
+        if (item){
+          tr = $('<tr/>');
+          tr.append("<td>" + item["location"] + "</td>");
+          tr.append("<td>" + item["query"] + "</td>");
+          td2 = $('<td/>');
+          td2.append("<button class='ta btn btn-sm btn-danger' data-id='" + item['location'] + "'>Target Audience</button> ")
+          td2.append("<button class='ta-del btn btn-sm btn-primary' data-id='" + item['location'] + "'>Delete</button>")
+          tr.append(td2)
+          $(".table").append(tr);
+        }
+    }
+  }
+
+}
+
+$(document).ready(function () {
+
+  displayAudiences();
+
+  $(document).on("click", ".ta", function(){
     var bucket_location = $(this).data("id");
     // Set bucket to local storage and then send the user a modal
     localStorage.setItem("selected_bucket") = bucket_location
+  });
+
+
+  $(document).on("click", ".ta-del", function(){
+    var bucket_location = $(this).data("id");
+
+    var audienceList = localStorage.getItem("audienceList");
+    if (audienceList != null) {
+
+      var json_list = JSON.parse(audienceList);
+
+      for (var i=0; i < json_list.length; i++) {
+        var item = json_list[i]
+        if (!item || item["location"] == bucket_location){
+            delete json_list[i]
+        }
+      }
+
+      localStorage.setItem("audienceList", JSON.stringify(json_list))
+
+    }
+
+    displayAudiences();
+
   });
 });
 

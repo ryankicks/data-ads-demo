@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 from twitter_ads.client import Client
+from twitter_ads.campaign import Campaign
+import datetime
+
 
 @login_required
 def json_handler(request):
