@@ -1,13 +1,14 @@
-Tweet Search
+Audience Creation and Ad Targeting using Twitter Data (Gnip) and Ads API
 =================
 
-This sample uses GNIP full archive search to show the activity volume and latest tweets on any given topic. It also renders tweets using Twitter's widgets.js.
+This sample uses GNIP full archive search to iteratively create audiences for ad targeting on Twitter. It uses the Full Archive Search API to determine volume of tweets about a topic, uploads them 
+as an audience via the TON API, and then allows creation of new Campaigns against that audience.
 
 <img src="screenshot.png" style="width: 70%;"/>
 
 As always, when developing on top of the Twitter platform, you must abide by the [Developer Agreement & Policy](https://dev.twitter.com/overview/terms/agreement-and-policy). 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/twitterdev/tweet-search)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/garethpaul/tweet-search)
 
 
 Requirements
@@ -16,6 +17,10 @@ Requirements
 To run this sample code, you can install the required libraries with:
 
 	`pip install -r requirements.txt`
+	
+Also note that your Twitter App needs to have Twitter Ads API access. Learn more about getting access here:
+
+https://dev.twitter.com/ads/overview
 
 Getting Started
 ============
@@ -67,10 +72,3 @@ In the UI, there is a link to show advanced options. Specifically:
 
 <img src="advanced.png" style="width: 70%;"/>
 
-Related Terms
-============
-
-The GNIP search can also suggest additional related terms to add to your query. Click on the 'related terms' 
-link and a drop-down will appear to suggest (and add) additional terms to your query:
-
-<img src="terms.png" style="width: 70%;"/>
