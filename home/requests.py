@@ -40,7 +40,7 @@ class GNIP:
         return GnipSearchAPI(settings.GNIP_USERNAME,
                           settings.GNIP_PASSWORD,
                           settings.GNIP_SEARCH_ENDPOINT,
-                          paged=True)
+                          paged=False)
 
     def get_timeline(self):
         """
