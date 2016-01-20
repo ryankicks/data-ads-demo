@@ -23,22 +23,6 @@
   </table>
 </div>
 <script>
-<<<<<<< HEAD
-$(document).ready(function () {
-  var audienceList = localStorage.getItem("audienceList");
-  if (audienceList != null) {
-    var json_list = JSON.parse(audienceList);
-    for (var i=0; i < json_list.length; i++) {
-        var item = json_list[i]
-        tr = $('<tr/>');
-        tr.append("<td>" + item["location"] + "</td>");
-        tr.append("<td>" + item["query"] + "</td>");
-        tr.append("<td><button class='ta btn btn-danger' data-id='" + item['location'] + "'>Target Audience</button>")
-        $(".table").append(tr);
-    }
-  }
-}
-
 
 function displayAudiences(){
 
