@@ -96,7 +96,8 @@ def query_tweets(request):
                              twitter_consumer_secret=settings.SOCIAL_AUTH_TWITTER_SECRET,
                              access_token=settings.TWITTER_ACCESS_TOKEN,
                              access_token_secret=settings.TWITTER_ACCESS_TOKEN_SECRET)
-        ton_response = ton_request.upload_data(payload=output.getvalue())
+        bytes = output.getvalue()
+        ton_response = ton_request.upload_data(payload=bytes.encode('utf-16be'))
         output.close()
         location = ton_response['location']
         response = HttpResponse(json.dumps({"location": location, "query": query}), content_type="application/json")
