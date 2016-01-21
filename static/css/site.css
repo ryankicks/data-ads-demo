@@ -299,3 +299,6 @@ a {
     background-color: #00ACED;
     border-color: #00ACED;
 }
+.inline {
+  display:inline;
+}

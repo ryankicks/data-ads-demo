@@ -8,6 +8,7 @@ from twitter_ads.client import Client
 from twitter_ads.campaign import Campaign
 import datetime
 
+
 @login_required
 def json_handler(request):
     """

@@ -23,3 +23,26 @@
 
     listAccounts();
   });
+
+  $(document).on("click", ".ta-del", function(){
+    var bucket_location = $(this).data("id");
+
+    var audienceList = localStorage.getItem("audienceList");
+    if (audienceList != null) {
+
+      var json_list = JSON.parse(audienceList);
+
+      for (var i=0; i < json_list.length; i++) {
+        var item = json_list[i]
+        if (!item || item["location"] == bucket_location){
+            delete json_list[i]
+        }
+      }
+
+      localStorage.setItem("audienceList", JSON.stringify(json_list))
+
+    }
+
+    displayAudiences();
+
+  });

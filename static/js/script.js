@@ -428,6 +428,10 @@ var Page = {
 					 // Let the user know that Audience Has been Created
 					 // Display some div
 					 NProgress.done();
+					 
+					 // redirect to audience API
+					 window.location = "/ads/audiences";
+
 				 },
 				 error : function(xhr, errorType, exception) {
 					 Page.handleError(xhr, errorType, exception);

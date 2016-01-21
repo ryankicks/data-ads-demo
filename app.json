@@ -1,7 +1,7 @@
 {
 	"name":"tweet-search",
-	"description":"Sample code showing tweet activity volume using GNIP search API. Built with Django, Tweet embeds and C3.",
-	"repository":"https://github.com/twitterdev/tweet-search",
+	"description":"Sample code showing audience creation and ad targeting using Twitter Data (via Gnip) and Twitter Ads API.",
+	"repository":"https://github.com/garethpaul/tweet-search",
 	"addons": ["heroku-postgresql:hobby-dev"],
 	"keywords":[
 		"python",

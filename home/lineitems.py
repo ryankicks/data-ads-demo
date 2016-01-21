@@ -8,6 +8,7 @@ from twitter_ads.client import Client
 from twitter_ads.campaign import TargetingCriteria, LineItem
 from twitter_ads.enum import PRODUCT, PLACEMENT, OBJECTIVE
 
+
 @login_required
 def new_targeting(request):
     """
@@ -19,7 +20,6 @@ def new_targeting(request):
     targeting_type = request.REQUEST.get("targeting_type", "BROAD_KEYWORD")
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
     account = client.accounts(account_id)
-
     targeting_criteria = TargetingCriteria(account)
     targeting_criteria.line_item_id = line_item_id
     targeting_criteria.targeting_type = targeting_type
@@ -35,7 +35,10 @@ def new(request):
     Returns a new campaign
     """
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-
+    account_id = request.REQUEST.get("account_id", "")
+    campaign_id = request.REQUEST.get("campaign_id", "")
+    name = request.REQUEST.get("name", "")
+    budget = request.REQUEST.get("budget", "")
     account_id = request.REQUEST.get("account_id", "")
     campaign_id = request.REQUEST.get("campaign_id", "")
     name = request.REQUEST.get("name", "")
@@ -44,7 +47,7 @@ def new(request):
 
     # create your campaign
     line_item = LineItem(account)
-    line_item.campaign_id = campaign_id
+    line_item.campaign_id = campaign.id
     line_item.name = name
     line_item.product_type = PRODUCT.PROMOTED_TWEETS
     line_item.placements = [PLACEMENT.ALL_ON_TWITTER]

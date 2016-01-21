@@ -29,6 +29,13 @@ function listAccounts(){
   $(".ads-api-account").click(function(e) {
     e.preventDefault();
     var accountId = $(this).data("id");
+    getCampaigns(accountId)
+    // remove Ads Tools
+    $(".ads-accounts").hide();
+    $(".ads-api-account").remove();
+    // Setup Campaigns
+    $(".ads-campaigns").show();
+    //getCampaigns();
 
     // if audiences
     if (page == "AUDIENCE"){
@@ -72,7 +79,7 @@ function mapBucket(account_id, id, input_file_path){
 
 // get the campaignList
 function getCampaigns(account_id){
-  $.getJSON("../../ads/api/campaigns?account_id=" + account_id,
+  $.getJSON("../ads/api/campaigns?account_id=" + account_id,
   function (json) {
     $(json["campaigns"]).each(function( index ) {
       var campaign = json["campaigns"][index]
@@ -94,7 +101,7 @@ function getCampaigns(account_id){
 
 // get the lineItems
 function getLineItems(account_id, campaign_id){
-  $.getJSON("../../ads/api/line_items?account_id=" + account_id + "&campaign_id=" + campaign_id,
+  $.getJSON("../ads/api/line_items?account_id=" + account_id + "&campaign_id=" + campaign_id,
   function (json) {
 
     $(json["line_items"]).each(function( index ) {
@@ -107,14 +114,18 @@ function getLineItems(account_id, campaign_id){
       $(".ads-lineitems").hide();
       $(".ads-api-lineitem").remove();
       $(".ads-targeting").show();
+      getTargetingCriteria(account_id, campaign_id, $(this).data("id"));
+
       if (page == "AUDIENCE") {
         setTATargeting(account_id, campaign_id, $(this).data("id"));
       } else {
         getTargetingCriteria(account_id, campaign_id, $(this).data("id"));
       }
+
     });
   });
 }
+
 
 // set TargetingCriteria
 function setTATargeting(account_id, campaign_id, line_item_id){

@@ -15,12 +15,43 @@
         <th>Audience Bucket</th>
         <th>Search Query</th>
         <th></th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody class="table-data">
     </tbody>
   </table>
 </div>
+
+<script>
+
+function displayAudiences(){
+
+  $(".table-data").html("");
+
+  var audienceList = localStorage.getItem("audienceList");
+  if (audienceList != null) {
+
+    var json_list = JSON.parse(audienceList);
+    for (var i=0; i < json_list.length; i++) {
+        var item = json_list[i];
+
+        if (item){
+          tr = $('<tr/>');
+          tr.append("<td>" + item["location"] + "</td>");
+          tr.append("<td>" + item["query"] + "</td>");
+          td2 = $('<td/>');
+          td2.append("<button class='ta btn btn-sm btn-danger' data-id='" + item['location'] + "'>Target Audience</button> ")
+          td2.append("<button class='ta-del btn btn-sm btn-primary' data-id='" + item['location'] + "'>Delete</button>")
+          tr.append(td2)
+          $(".table").append(tr);
+        }
+    }
+  }
+
+}
+
+</script>
 
 <!-- Modal -->
 <div id="adsModal" class="modal fade" role="dialog">
@@ -88,7 +119,5 @@ var page = "AUDIENCE";
 </script>
 <script src="{{STATIC_URL}}js/ads.js"></script>
 <script src="{{STATIC_URL}}js/audiences.js"></script>
-
-
 
 {% endblock %}
