@@ -21,28 +21,74 @@
     </tbody>
   </table>
 </div>
+
+<!-- Modal -->
+<div id="adsModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Ads</h4>
+      </div>
+      <div class="modal-body">
+
+				<!-- Setup Account-->
+				<div class="ads-accounts">
+					<h3>Select Account</h3>
+					<!-- Single button -->
+					<div class="btn-group">
+					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					    Select Ads Account <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu dropdown-ads-accounts"></ul>
+					</div>
+				</div>
+
+				<!-- Setup Campaign-->
+				<div class="ads-campaigns">
+					<h3>Select Campaign</h3>
+					<!-- Single button -->
+					<div class="btn-group">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Select Campaign <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu dropdown-ads-campaigns"></ul>
+					</div>
+				</div>
+
+				<!-- Setup LineItems-->
+				<div class="ads-lineitems">
+					<h3>Select Line Item</h3>
+					<!-- Single button -->
+					<div class="btn-group">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Select Line Item <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu dropdown-ads-lineitems"></ul>
+					</div>
+				</div>
+
+				<!-- Setup Targeting-->
+				<div class="ads-targeting">
+					<h3>Confirm Targeting</h3>
+					<!-- Single button -->
+					<ul class="ads-targeting-list"></ul>
+					<button type="button" class="btn btn-default btn-lg ads-add-targeting">Add Targeting</button>
+				</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
 <script>
-$(document).ready(function () {
-  var audienceList = localStorage.getItem("audienceList");
-  if (audienceList != null) {
-    var json_list = JSON.parse(audienceList);
-    for (var i=0; i < json_list.length; i++) {
-        var item = json_list[i]
-        tr = $('<tr/>');
-        tr.append("<td>" + item["location"] + "</td>");
-        tr.append("<td>" + item["query"] + "</td>");
-        tr.append("<td><button class='ta btn btn-danger' data-id='" + item['location'] + "'>Target Audience</button>")
-        $(".table").append(tr);
-    }
-  }
-  $(".ta").on("click", function(){
-    var bucket_location = $(this).data("id");
-    // Set bucket to local storage and then send the user a modal
-    localStorage.setItem("selected_bucket") = bucket_location
-  });
-});
-
-
+var page = "AUDIENCE";
 </script>
+<script src="{{STATIC_URL}}js/ads.js"></script>
+<script src="{{STATIC_URL}}js/audiences.js"></script>
+
+
 
 {% endblock %}

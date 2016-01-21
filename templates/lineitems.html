@@ -6,7 +6,15 @@
 
 {% block content %}
 <div class="row">
-  <h4><a href="accounts">Ads Account</a> > <a href="campaigns?account_id={{ account_id }}">Campaign</a> > Line Items</h4>
+  <ol class="breadcrumb">
+    <li><a href="accounts">Ads Accounts</a></li>
+    <li><a href="campaigns?account_id={{ account_id }}">Campaign</a></li>
+    <li class="active">Line Items</li>
+  </ol>
+
+  <h3 class="inline">Line Item List</h3>
+  <button type='button' class='btn btn-danger pull-right' data-toggle='modal' data-target='#lineitemModal'>New Line Item</button></div>
+
   <!-- Setup Table to consume Ads Api -->
   <table class="table">
     <thead>
@@ -22,21 +30,36 @@
   </table>
 </div>
 <script>
-$(document).ready(function () {
-    $.getJSON("../ads/api/line_items?account_id={{ account_id }}&campaign_id={{ campaign_id }}",
-    function (json) {
-        var tr;
-        for (var i = 0; i < json["line_items"].length; i++) {
-            tr = $('<tr/>');
-            var item = json["line_items"][i]
-            var line_item_id = item.id
-            tr.append("<td><a href='line_items?account_id=" + json["account_id"] + "&campaign_id=" + json["campaign_id"]  + "'>" + item.name + "</a></td>");
-            tr.append("<td>" + item.objective +"</td>")
-            tr.append("<td>" + item.bid_amount +"</td>")
-            tr.append("<td>" + item.id + "</td>");
-            $('.table').append(tr);
-        }
-    });
-});
+var account_id = "{{ account_id }}";
+var campaign_id = "{{ campaign_id }}";
 </script>
+<script src="{{STATIC_URL}}js/lineitems.js"></script>
+
+<!-- Modal -->
+<div id="lineitemModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">New Line Item</h4>
+      </div>
+      <div class="modal-body">
+
+          <div class="form-group">
+            <label for="">Line Item Name</label>
+            <input type="text" class="form-control" id="line_item_name" placeholder="Powerball Line Item">
+          </div>
+          <div class="form-group">
+            <label for="">Line Item Bid</label>
+            <input type="text" class="form-control" id="line_item_bid" placeholder="10">
+          </div>
+          <button id="createLineItem" class="btn btn-info">Create</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
