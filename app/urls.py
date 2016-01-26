@@ -9,6 +9,8 @@ urlpatterns = patterns('',
     url(r'^$', 'home.views.login', name='login'),
     url(r'^home$', 'home.views.home', name='home'),
     url(r'^logout$', 'home.views.logout', name='logout'),
+
+    # Queries for Graphing
     url(r'^query/chart', 'home.views.query_chart', name='query_chart'),
     url(r'^query/tweets', 'home.views.query_tweets', name='query_tweets'),
     url(r'^query/frequency', 'home.views.query_frequency', name='query_frequency'),
@@ -35,7 +37,7 @@ urlpatterns = patterns('',
     url(r'^ads/api/audiences/new', 'home.audiences.new', name='ads_audiences_new'),
     url(r'^ads/api/audiences/change', 'home.audiences.change', name='ads_audiences_change'),
 
-
+    # Login setup with Twitter
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^admin/', include(admin.site.urls)),
 )
