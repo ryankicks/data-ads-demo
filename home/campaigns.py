@@ -6,6 +6,7 @@ from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 from twitter_ads.client import Client
 from twitter_ads.campaign import Campaign
+from twitter_ads.error import Error
 import datetime
 
 
@@ -39,16 +40,22 @@ def new(request):
     daily_budget = request.REQUEST.get("daily_budget", "")
     account = client.accounts(account_id)
     # create your campaign
-    campaign = Campaign(account)
-    campaign.funding_instrument_id = account.funding_instruments().next().id
-    campaign.daily_budget_amount_local_micro = daily_budget
-    campaign.name = campaign_name
-    campaign.paused = True
-    campaign.start_time = datetime.datetime.utcnow()
-    campaign.save()
-
-    json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
+    json_data = {}
+    try:
+        campaign = Campaign(account)
+        campaign.funding_instrument_id = account.funding_instruments().next().id
+        campaign.daily_budget_amount_local_micro = daily_budget
+        campaign.name = campaign_name
+        campaign.paused = True
+        campaign.start_time = datetime.datetime.utcnow()
+        campaign.save()
+        json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
+    except Exception as e:
+        json_data = e.details
+        # passing as we send the json_data
+        pass
     return HttpResponse(json.dumps(json_data), content_type="application/json")
+
 
 
 @login_required

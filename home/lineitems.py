@@ -7,7 +7,7 @@ from django.conf import settings
 from twitter_ads.client import Client
 from twitter_ads.campaign import TargetingCriteria, LineItem
 from twitter_ads.enum import PRODUCT, PLACEMENT, OBJECTIVE
-
+from twitter_ads.error import Error
 
 @login_required
 def new_targeting(request):
@@ -18,16 +18,23 @@ def new_targeting(request):
     account_id = request.REQUEST.get("account_id", "")
     targeting_value = request.REQUEST.get("targeting_value");
     targeting_type = request.REQUEST.get("targeting_type", "BROAD_KEYWORD")
-    client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-    account = client.accounts(account_id)
-    targeting_criteria = TargetingCriteria(account)
-    targeting_criteria.line_item_id = line_item_id
-    targeting_criteria.targeting_type = targeting_type
-    targeting_criteria.targeting_value = targeting_value
-    if targeting_value == "TAILORED_AUDIENCE":
-        targeting_criteria.tailored_audience_type = "FLEXIBLE"
-    targeting_criteria.save()
-    return HttpResponse(json.dumps({"account_id": account_id, "line_item_id": line_item_id, "targeting_value": targeting_value}), content_type="application/json")
+    json_data = {}
+    try:
+        client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+        account = client.accounts(account_id)
+        targeting_criteria = TargetingCriteria(account)
+        targeting_criteria.line_item_id = line_item_id
+        targeting_criteria.targeting_type = targeting_type
+        targeting_criteria.targeting_value = targeting_value
+        if targeting_value == "TAILORED_AUDIENCE":
+            targeting_criteria.tailored_audience_type = "FLEXIBLE"
+        targeting_criteria.save()
+        json_data = {"account_id": account_id, "line_item_id": line_item_id, "targeting_value": targeting_value}
+    except Exception as e:
+        json_data = e.details
+        # passing to push the json_data to the browser
+        pass
+    return HttpResponse(json.dumps(), content_type="application/json")
 
 @login_required
 def new(request):
@@ -37,26 +44,29 @@ def new(request):
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
     account_id = request.REQUEST.get("account_id", "")
     campaign_id = request.REQUEST.get("campaign_id", "")
-    name = request.REQUEST.get("name", "")
+    campaign_name = request.REQUEST.get("name", "")
     budget = request.REQUEST.get("budget", "")
     account_id = request.REQUEST.get("account_id", "")
-    campaign_id = request.REQUEST.get("campaign_id", "")
     name = request.REQUEST.get("name", "")
-    bid_amount = request.REQUEST.get("bid", "")
-    account = client.accounts(account_id)
+    bid_amount = request.REQUEST.get("bid_amount", "")
 
-    # create your campaign
-    line_item = LineItem(account)
-    line_item.campaign_id = campaign.id
-    line_item.name = name
-    line_item.product_type = PRODUCT.PROMOTED_TWEETS
-    line_item.placements = [PLACEMENT.ALL_ON_TWITTER]
-    line_item.objective = OBJECTIVE.TWEET_ENGAGEMENTS
-    line_item.bid_amount_local_micro = bid_amount
-    line_item.paused = True
-    line_item.save()
-
-    json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
+    json_data = {}
+    try:
+        account = client.accounts(account_id)
+        # create your campaign
+        line_item = LineItem(account)
+        line_item.campaign_id = campaign_id
+        line_item.name = name
+        line_item.product_type = PRODUCT.PROMOTED_TWEETS
+        line_item.placements = [PLACEMENT.ALL_ON_TWITTER]
+        line_item.objective = OBJECTIVE.TWEET_ENGAGEMENTS
+        line_item.bid_amount_local_micro = bid_amount
+        line_item.paused = True
+        line_item.save()
+        json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign_id}
+    except Error as e:
+        json_data = e.details
+        pass
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 @login_required
@@ -69,7 +79,7 @@ def json_handler(request):
     campaign_id = request.REQUEST.get("campaign_id", "")
     account = client.accounts(account_id)
     # TODO: Link to Ads API Docs for LineItem.rst
-    line_items = account.line_items(None, params={'campaign_id': campaign_id})
+    line_items = account.line_items(None, campaign_ids=campaign_id)
     line_item_list = []
     for line_item in line_items:
         name = line_item.name
