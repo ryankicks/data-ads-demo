@@ -44,7 +44,7 @@ def new(request):
     try:
         campaign = Campaign(account)
         campaign.funding_instrument_id = account.funding_instruments().next().id
-        campaign.daily_budget_amount_local_micro = daily_budget
+        campaign.daily_budget_amount_local_micro = int(daily_budget)*1000
         campaign.name = campaign_name
         campaign.paused = True
         campaign.start_time = datetime.datetime.utcnow()
@@ -55,7 +55,6 @@ def new(request):
         # passing as we send the json_data
         pass
     return HttpResponse(json.dumps(json_data), content_type="application/json")
-
 
 
 @login_required

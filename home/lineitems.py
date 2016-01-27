@@ -61,7 +61,7 @@ def new(request):
         line_item.product_type = PRODUCT.PROMOTED_TWEETS
         line_item.placements = [PLACEMENT.ALL_ON_TWITTER]
         line_item.objective = OBJECTIVE.TWEET_ENGAGEMENTS
-        line_item.bid_amount_local_micro = bid_amount
+        line_item.bid_amount_local_micro = int(bid_amount)*1000
         line_item.paused = True
         line_item.save()
         json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign_id}
