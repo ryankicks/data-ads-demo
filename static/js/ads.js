@@ -132,7 +132,16 @@ function setTATargeting(account_id, campaign_id, line_item_id){
   // for each value send http request to create a targeting criteria
   $.getJSON("../../ads/api/targeting/new?account_id=" + account_id + "&line_item_id=" + line_item_id + "&targeting_value=" +  localStorage.getItem("selected_ta_list_id") + "&targeting_type=TAILORED_AUDIENCE",
   function (json) {
-    console.log(json);
+    if (json['valid'] == true){
+      //everything is great
+      console.log("no error");
+    } else {
+      // make things happen
+      console.log("error");
+      console.log(error);
+      $(".error").show();
+      $(".error-details").text(json);
+    }
   });
 }
 
@@ -166,7 +175,13 @@ function setTargetingCriteria(account_id, campaign_id, line_item_id){
     var targeting_value = checkedVals[index];
     $.getJSON("../../ads/api/targeting/new?account_id=" + account_id + "&line_item_id=" + campaign_id + "&targeting_value=" + targeting_value,
     function (json) {
-      console.log(json);
+      if (json['valid'] == true) {
+        // Ready
+        console.log("ready");
+      } else {
+        // Not Valid
+        console.log("not ready");
+      }
     });
   });
 }

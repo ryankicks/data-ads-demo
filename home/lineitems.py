@@ -17,7 +17,7 @@ def new_targeting(request):
     line_item_id = request.REQUEST.get("line_item_id", "")
     account_id = request.REQUEST.get("account_id", "")
     targeting_value = request.REQUEST.get("targeting_value");
-    targeting_type = request.REQUEST.get("targeting_type", "BROAD_KEYWORD")
+    targeting_type = "BEHAVIOR_EXPANDED"
     json_data = {}
     try:
         client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
@@ -29,12 +29,13 @@ def new_targeting(request):
         if targeting_value == "TAILORED_AUDIENCE":
             targeting_criteria.tailored_audience_type = "FLEXIBLE"
         targeting_criteria.save()
-        json_data = {"account_id": account_id, "line_item_id": line_item_id, "targeting_value": targeting_value}
+        json_data = {"valid": True, "account_id": account_id, "line_item_id": line_item_id, "targeting_value": targeting_value}
     except Exception as e:
         json_data = e.details
+        json_data["valid"] = False
         # passing to push the json_data to the browser
         pass
-    return HttpResponse(json.dumps(), content_type="application/json")
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 @login_required
 def new(request):
