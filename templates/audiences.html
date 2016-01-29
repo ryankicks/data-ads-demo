@@ -73,6 +73,16 @@ function displayAudiences(){
 				<!-- Setup Account-->
 				<div class="ads-accounts">
 					<h3>Select Account</h3>
+
+          <!-- Assert msg -->
+          <div class="alert alert-warning" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+           </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            An advertising <strong>account</strong> is correlated to a specific user who can promote activity on or off Twitter e.g. <a href="http://twitter.com/gpj">@gpj</a>.
+          </div>
+
 					<!-- Single button -->
 					<div class="btn-group">
 					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -85,6 +95,16 @@ function displayAudiences(){
 				<!-- Setup Campaign-->
 				<div class="ads-campaigns">
 					<h3>Select Campaign</h3>
+          <!-- Step Through -->
+          <div class="alert alert-warning" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+           </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            An advertising <strong>campaign</strong> is a series of advertisement messages that share a single idea and theme e.g. Superbowl Promotion Campaign.
+          </div>
+
+
 					<!-- Single button -->
 					<div class="btn-group">
 						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -97,6 +117,16 @@ function displayAudiences(){
 				<!-- Setup LineItems-->
 				<div class="ads-lineitems">
 					<h3>Select Line Item</h3>
+
+          <!-- Step Through -->
+          <div class="alert alert-warning" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+           </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            An advertising <strong>line-item</strong> specifies the details of the sale, such as type, section, create, date(s) to run, cost, etc. e.g. Half-Time Promoted Tweet.
+          </div>
+
 					<!-- Single button -->
 					<div class="btn-group">
 						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -108,10 +138,11 @@ function displayAudiences(){
 
 				<!-- Setup Targeting-->
 				<div class="ads-targeting">
-					<h3>Confirm Targeting</h3>
-					<!-- Single button -->
-					<ul class="ads-targeting-list"></ul>
-					<button type="button" class="btn btn-default btn-lg ads-add-targeting">Add Targeting</button>
+
+          <div class="alert alert-success">
+            <strong>Success!</strong> You have successfully created targeting critera for your campaign.
+          </div>
+
 				</div>
       </div>
 
