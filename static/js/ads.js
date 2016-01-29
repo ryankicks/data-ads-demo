@@ -135,6 +135,10 @@ function setTATargeting(account_id, campaign_id, line_item_id){
     if (json['valid'] == true){
       //everything is great
       console.log("no error");
+      console.log(json);
+      //$('#adsModal').hide();
+      //location.reload();
+      
     } else {
       // make things happen
       console.log("error");

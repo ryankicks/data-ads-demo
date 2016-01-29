@@ -49,9 +49,10 @@ def new(request):
         campaign.paused = True
         campaign.start_time = datetime.datetime.utcnow()
         campaign.save()
-        json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
-    except Exception as e:
-        json_data = e.details
+        json_data = {"valid": True, "account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
+    except Error as e:
+        json_data["response"] = e.details
+        json_data["valid"] = False
         # passing as we send the json_data
         pass
     return HttpResponse(json.dumps(json_data), content_type="application/json")

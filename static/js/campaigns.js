@@ -22,6 +22,14 @@ $(document).ready(function () {
 function createCampaign(account_id, campaign, daily_budget){
   $.getJSON("../../ads/api/campaign/new?account_id=" + account_id + "&campaign=" + campaign + "&daily_budget=" + daily_budget,
   function (json) {
-    location.reload();
+    if (json['valid'] == true){
+      location.reload();
+    } else {
+      console.log("error with queries");
+      $('#campaignModal').modal('hide');
+      $('.error').show();
+      $('.error-msg').text("Error: " + json['response'][0]['message']);
+    }
+
   });
 }

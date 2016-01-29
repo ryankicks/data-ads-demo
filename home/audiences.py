@@ -7,6 +7,7 @@ from twitter_ads.client import Client
 from twitter_ads.audience import TailoredAudience
 from twitter_ads.http import Request
 from twitter_ads.cursor import Cursor
+from twitter_ads.error import Error
 
 @login_required
 def handler(request):
@@ -26,10 +27,15 @@ def new(request):
     name = request.REQUEST.get("name", "")
     resource = '/0/accounts/' + account_id + '/tailored_audiences'
     params = {'name': name, 'list_type': 'HANDLE'}
-    request = Request(client, 'post', resource, params=params).perform()
-    # return audience.id to use
-    ta_id = request.body['data']['id']
-    json_data = {"account_id": account_id, "name": name, "id": str(ta_id)}
+    json_data = {}
+    try:
+        request = Request(client, 'post', resource, params=params).perform()
+        # return audience.id to use
+        ta_id = request.body['data']['id']
+        json_data = {"valid": True, "account_id": account_id, "name": name, "id": str(ta_id)}
+    except Error as e:
+        json_data["response"] = e.details
+        json_data["valid"] = False
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 @login_required
