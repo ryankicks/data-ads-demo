@@ -30,9 +30,8 @@ def new_targeting(request):
             targeting_criteria.tailored_audience_type = "FLEXIBLE"
         targeting_criteria.save()
         json_data = {"valid": True, "account_id": account_id, "line_item_id": line_item_id, "targeting_value": targeting_value}
-    except Exception as e:
-        # Get first item from list of errors
-        json_data = e.details[0]
+    except Error as e:
+        json_data["response"] = e.details
         json_data["valid"] = False
         # passing to push the json_data to the browser
         pass
@@ -41,7 +40,7 @@ def new_targeting(request):
 @login_required
 def new(request):
     """
-    Returns a new campaign
+    Returns a new line item
     """
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
     account_id = request.REQUEST.get("account_id", "")
@@ -67,7 +66,9 @@ def new(request):
         line_item.save()
         json_data = {"account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign_id}
     except Error as e:
-        json_data = e.details
+        json_data["response"] = e.details
+        json_data["valid"] = False
+
         pass
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
