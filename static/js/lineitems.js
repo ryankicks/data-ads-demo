@@ -28,6 +28,14 @@ function createLineItem(account_id, campaign_id, name, bid){
                                                       + "&name=" + name
                                                       + "&bid_amount=" + bid,
   function (json) {
-    location.reload();
+    if (json['valid'] == true){
+      location.reload();
+    } else {
+      console.log("error with queries");
+      $('#lineitemModal').modal('hide');
+      $('.error').show();
+      $('.error-msg').text("Error: " + json['response'][0]['message']);
+    }
+
   });
 }
