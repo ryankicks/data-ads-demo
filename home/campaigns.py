@@ -17,7 +17,7 @@ def json_handler(request):
     """
 
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-    account_id = request.REQUEST.get("account_id", "")
+    account_id = request.GET.get("account_id", "")
     account = client.accounts(account_id)
     # TODO: Link to Ads API Docs for Campaign.rst
     campaigns = account.campaigns()
@@ -35,9 +35,9 @@ def new(request):
     Returns a new campaign
     """
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-    account_id = request.REQUEST.get("account_id", "")
-    campaign_name = request.REQUEST.get("campaign", "")
-    daily_budget = request.REQUEST.get("daily_budget", "")
+    account_id = request.GET.get("account_id", "")
+    campaign_name = request.GET.get("campaign", "")
+    daily_budget = request.GET.get("daily_budget", "")
     account = client.accounts(account_id)
     # create your campaign
     json_data = {}
@@ -63,6 +63,6 @@ def handler(request):
     """
     Returns account page handler page for given request
     """
-    account_id = request.REQUEST.get("account_id", "")
+    account_id = request.GET.get("account_id", "")
     context = {"request": request, "account_id": account_id}
     return render_to_response('campaigns.html', context, context_instance=RequestContext(request))

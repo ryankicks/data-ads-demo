@@ -14,9 +14,9 @@ def new_targeting(request):
     """
     Creates a new
     """
-    line_item_id = request.REQUEST.get("line_item_id", "")
-    account_id = request.REQUEST.get("account_id", "")
-    targeting_value = request.REQUEST.get("targeting_value");
+    line_item_id = request.GET.get("line_item_id", "")
+    account_id = request.GET.get("account_id", "")
+    targeting_value = request.GET.get("targeting_value");
     targeting_type = "BEHAVIOR_EXPANDED"
     json_data = {}
     try:
@@ -43,13 +43,13 @@ def new(request):
     Returns a new line item
     """
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-    account_id = request.REQUEST.get("account_id", "")
-    campaign_id = request.REQUEST.get("campaign_id", "")
-    campaign_name = request.REQUEST.get("name", "")
-    budget = request.REQUEST.get("budget", "")
-    account_id = request.REQUEST.get("account_id", "")
-    name = request.REQUEST.get("name", "")
-    bid_amount = request.REQUEST.get("bid_amount", "")
+    account_id = request.GET.get("account_id", "")
+    campaign_id = request.GET.get("campaign_id", "")
+    campaign_name = request.GET.get("name", "")
+    budget = request.GET.get("budget", "")
+    account_id = request.GET.get("account_id", "")
+    name = request.GET.get("name", "")
+    bid_amount = request.GET.get("bid_amount", "")
 
     json_data = {}
     try:
@@ -78,8 +78,8 @@ def json_handler(request):
     Returns json_data {"campaigns": [campaign_list} for given request
     """
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-    account_id = request.REQUEST.get("account_id", "")
-    campaign_id = request.REQUEST.get("campaign_id", "")
+    account_id = request.GET.get("account_id", "")
+    campaign_id = request.GET.get("campaign_id", "")
     account = client.accounts(account_id)
     # TODO: Link to Ads API Docs for LineItem.rst
     line_items = account.line_items(None, campaign_ids=campaign_id)
@@ -100,7 +100,7 @@ def handler(request):
     """
     Returns account page handler page for given request
     """
-    account_id = request.REQUEST.get("account_id", "")
-    campaign_id = request.REQUEST.get("campaign_id", "")
+    account_id = request.GET.get("account_id", "")
+    campaign_id = request.GET.get("campaign_id", "")
     context = {"request": request, "account_id": account_id, "campaign_id": campaign_id}
     return render_to_response('lineitems.html', context, context_instance=RequestContext(request))
