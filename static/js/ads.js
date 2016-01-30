@@ -106,7 +106,7 @@ function getLineItems(account_id, campaign_id){
 
     $(json["line_items"]).each(function( index ) {
       var lineItem = json["line_items"][index];
-      $(".dropdown-ads-lineitems").append("<li><a href='#' class='ads-api-lineitem' data-id='" + lineItem.id + "'>" + lineItem.name + "</a></li>");
+      $(".dropdown-ads-lineitems").append("<li><a href='#' class='ads-api-lineitem' data-id='" + lineItem.id + "'>" + lineItem.name + "-" + lineItem.id + "</a></li>");
     });
     // LineItem
     $(".ads-api-lineitem").click(function(e) {
