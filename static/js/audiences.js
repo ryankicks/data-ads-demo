@@ -6,11 +6,13 @@
     var json_list = JSON.parse(audienceList);
     for (var i=0; i < json_list.length; i++) {
         var item = json_list[i]
-        tr = $('<tr/>');
-        tr.append("<td>" + item["location"] + "</td>");
-        tr.append("<td>" + item["query"] + "</td>");
-        tr.append("<button type='button' data-name='" + item['query'] + "' data-id='" + item['location'] + "' id='adsExport' class='btn btn-danger' data-toggle='modal' data-target='#adsModal'>Export Audience</button>")
-        $(".table").append(tr);
+    	if (item){
+            tr = $('<tr/>');
+            tr.append("<td>" + item["query"] + "</td>");
+            tr.append("<td>" + item["location"] + "</td>");
+            tr.append("<td><button type='button' data-name='" + item['query'] + "' data-id='" + item['location'] + "' id='adsExport' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#adsModal'>Export Audience</button></td>")
+            $(".table").append(tr);
+    	}
     }
   }
 

@@ -37,12 +37,8 @@ Getting Started
 	
 - To initialize your database, run the from the `tweet-search` directory:
 
-  `python manage.py syncdb --settings=app.settings_my`
-  
-  Then run:
-  
   `python manage.py migrate --settings=app.settings_my`
-
+  
 - To start the server, run the following from the `tweet-search` directory:
 
   `fab start`

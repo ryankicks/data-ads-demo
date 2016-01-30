@@ -18,7 +18,7 @@ class GNIP:
         self.timeframe = self.request_timeframe(self.request)
         self.query = query
         self.query_count = query_count
-        self.interval = self.request.REQUEST.get("interval", "hour")
+        self.interval = self.request.GET.get("interval", "hour")
         #TODO: FIX THIS
         self.days = self.timeframe.days
         self.start = self.timeframe.start
@@ -28,9 +28,9 @@ class GNIP:
         """
         Returns a timeframe to use in the API query
         """
-        request_timeframe = Timeframe(start = request.REQUEST.get("start", None),
-                                      end = request.REQUEST.get("end", None),
-                                      interval = request.REQUEST.get("interval", "hour"))
+        request_timeframe = Timeframe(start = request.GET.get("start", None),
+                                      end = request.GET.get("end", None),
+                                      interval = request.GET.get("interval", "hour"))
         return request_timeframe
 
     def api(self):

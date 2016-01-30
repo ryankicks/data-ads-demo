@@ -23,8 +23,8 @@ def new(request):
     Returns a new TA path to hold the bucket location.
     """
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-    account_id = request.REQUEST.get("account_id", "")
-    name = request.REQUEST.get("name", "")
+    account_id = request.GET.get("account_id", "")
+    name = request.GET.get("name", "")
     resource = '/0/accounts/' + account_id + '/tailored_audiences'
     params = {'name': name, 'list_type': 'HANDLE'}
     json_data = {}
@@ -44,9 +44,9 @@ def change(request):
     Returns a change to TA to upload a bucket location.
     """
     client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
-    account_id = request.REQUEST.get("account_id", "")
-    identifier = request.REQUEST.get("id", "")
-    input_file_path = request.REQUEST.get("input_file_path", "")
+    account_id = request.GET.get("account_id", "")
+    identifier = request.GET.get("id", "")
+    input_file_path = request.GET.get("input_file_path", "")
     # Update With location
     resource = '/0/accounts/' + account_id + '/tailored_audience_changes'
     params = {'tailored_audience_id': identifier, 'input_file_path': input_file_path, 'operation': "ADD"}

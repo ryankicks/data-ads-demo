@@ -33,7 +33,7 @@ def home(request):
     """
     Returns home page for given request
     """
-    query = request.REQUEST.get("query", "")
+    query = request.GET.get("query", "")
     context = {"request": request, "query0": query}
     tweets = []
     return render_to_response('home.html', context, context_instance=RequestContext(request))
@@ -44,8 +44,8 @@ def query_chart(request):
     Returns query chart for given request
     """
     # TODO: Move this to one line e.g. queries to query
-    query = request.REQUEST.get("query", None)
-    queries = request.REQUEST.getlist("queries[]")
+    query = request.GET.get("query", None)
+    queries = request.GET.getlist("queries[]")
     if query:
         queries = [query]
 
@@ -56,14 +56,14 @@ def query_chart(request):
 
 @login_required
 def query_frequency(request):
-    query = request.REQUEST.get("query", None)
+    query = request.GET.get("query", None)
     response_data = {}
     sample = 500
     if query is not None:
         # Get Timeframe e.g. process time from request
-        request_timeframe = Timeframe(start = request.REQUEST.get("start", None),
-                                      end = request.REQUEST.get("end", None),
-                                      interval = request.REQUEST.get("interval", "hour"))
+        request_timeframe = Timeframe(start = request.GET.get("start", None),
+                                      end = request.GET.get("end", None),
+                                      interval = request.GET.get("interval", "hour"))
         # Query GNIP and get frequency
         data = Frequency(query = query,
                               sample = sample,
@@ -80,9 +80,9 @@ def query_tweets(request):
     """
     Returns tweet query
     """
-    query_count = 10000#int(request.REQUEST.get("embedCount", TWEET_QUERY_COUNT))
-    export = request.REQUEST.get("export", None)
-    query = request.REQUEST.get("query", "")
+    query_count = 10000#int(request.GET.get("embedCount", TWEET_QUERY_COUNT))
+    export = request.GET.get("export", None)
+    query = request.GET.get("query", "")
     tweets = Tweets(query=query, query_count=query_count, request=request)
 
     response_data = {}

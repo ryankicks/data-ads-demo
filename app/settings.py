@@ -38,7 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'social.apps.django_app.default',
-    'south',
     'tags',
     'app',
     'home',
@@ -120,6 +119,22 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(BASE_DIR, "static"),
 )
+
+# security: https://docs.djangoproject.com/en/1.9/ref/middleware/#module-django.middleware.security
+SECURE_HSTS_SECONDS = 31536000 
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_FRAME_DENY = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# security: https://django-csp.readthedocs.org/en/latest/configuration.html#policy-settings
+CSP_DEFAULT_SRC = ("'self'", 'http://*.twitter.com', 'https://*.twitter.com', 'https://*.twimg.com', 'https://*.vine.co',)
+CSP_IMG_SRC = CSP_DEFAULT_SRC + ('data:', 'https://www.google-analytics.com', )
+CSP_SCRIPT_SRC = CSP_DEFAULT_SRC + ('https://www.google-analytics.com', 'https://ajax.googleapis.com', 'https://maxcdn.bootstrapcdn.com', )
+CSP_STYLE_SRC = CSP_DEFAULT_SRC + ("'unsafe-inline'", 'https://fonts.googleapis.com', 'https://maxcdn.bootstrapcdn.com', )
+CSP_FONT_SRC = CSP_DEFAULT_SRC + ('https://fonts.gstatic.com', 'https://maxcdn.bootstrapcdn.com', )
+CSP_OBJECT_SRC = ("'none'", )
 
 SOCIAL_AUTH_LOGIN_URL          = '/login'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/home'
