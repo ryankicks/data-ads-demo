@@ -5,6 +5,7 @@ from gnip_search.gnip_search_api import QueryError as GNIPQueryError
 from django.conf import settings
 import requests
 
+
 class Chart:
     """
     Class for creating line graph chart
@@ -33,7 +34,8 @@ class Chart:
                 request = requests.GNIP(request=self.request, query=q)
                 timeline = request.get_timeline()
                 if 'start' not in data:
-                    data['start'] = request.start.strftime(self.DATE_FORMAT_JSON)
+                    data['start'] = request.start.strftime(
+                        self.DATE_FORMAT_JSON)
                 if 'end' not in data:
                     data['end'] = request.end.strftime(self.DATE_FORMAT_JSON)
                 if 'days' not in data:
@@ -43,10 +45,11 @@ class Chart:
                 print e
 
             # Process timeseries on the GNIP Data
-            time_series_data = Timeseries(q, timeline, columns, self.total, self.x_axis)
+            time_series_data = Timeseries(
+                q, timeline, columns, self.total, self.x_axis)
             column = time_series_data.columns
 
-            if self.x_axis == None:
+            if self.x_axis is None:
                 self.x_axis = time_series_data.xAxis
                 columns.insert(0, self.x_axis)
 

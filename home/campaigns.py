@@ -16,7 +16,11 @@ def json_handler(request):
     Returns json_data {"campaigns": [campaign_list} for given request
     """
 
-    client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+    client = Client(
+        settings.SOCIAL_AUTH_TWITTER_KEY,
+        settings.SOCIAL_AUTH_TWITTER_SECRET,
+        settings.TWITTER_ACCESS_TOKEN,
+        settings.TWITTER_ACCESS_TOKEN_SECRET)
     account_id = request.GET.get("account_id", "")
     account = client.accounts(account_id)
     # TODO: Link to Ads API Docs for Campaign.rst
@@ -26,7 +30,8 @@ def json_handler(request):
         name = campaign.name
         identifier = campaign.id
         campaign_list.append({"name": name, "id": identifier})
-    return HttpResponse(json.dumps({"account_id": account_id, "campaigns": campaign_list}), content_type="application/json")
+    return HttpResponse(json.dumps(
+        {"account_id": account_id, "campaigns": campaign_list}), content_type="application/json")
 
 
 @login_required
@@ -34,7 +39,11 @@ def new(request):
     """
     Returns a new campaign
     """
-    client = Client(settings.SOCIAL_AUTH_TWITTER_KEY, settings.SOCIAL_AUTH_TWITTER_SECRET, settings.TWITTER_ACCESS_TOKEN, settings.TWITTER_ACCESS_TOKEN_SECRET)
+    client = Client(
+        settings.SOCIAL_AUTH_TWITTER_KEY,
+        settings.SOCIAL_AUTH_TWITTER_SECRET,
+        settings.TWITTER_ACCESS_TOKEN,
+        settings.TWITTER_ACCESS_TOKEN_SECRET)
     account_id = request.GET.get("account_id", "")
     campaign_name = request.GET.get("campaign", "")
     daily_budget = request.GET.get("daily_budget", "")
@@ -44,12 +53,16 @@ def new(request):
     try:
         campaign = Campaign(account)
         campaign.funding_instrument_id = account.funding_instruments().next().id
-        campaign.daily_budget_amount_local_micro = int(daily_budget)*1000
+        campaign.daily_budget_amount_local_micro = int(daily_budget) * 1000
         campaign.name = campaign_name
         campaign.paused = True
         campaign.start_time = datetime.datetime.utcnow()
         campaign.save()
-        json_data = {"valid": True, "account_id": account_id, "campaign_name": campaign_name, "campaign_id": campaign.id}
+        json_data = {
+            "valid": True,
+            "account_id": account_id,
+            "campaign_name": campaign_name,
+            "campaign_id": campaign.id}
     except Error as e:
         json_data["response"] = e.details
         json_data["valid"] = False
@@ -65,4 +78,7 @@ def handler(request):
     """
     account_id = request.GET.get("account_id", "")
     context = {"request": request, "account_id": account_id}
-    return render_to_response('campaigns.html', context, context_instance=RequestContext(request))
+    return render_to_response(
+        'campaigns.html',
+        context,
+        context_instance=RequestContext(request))

@@ -3,6 +3,7 @@ from django.conf import settings
 from gnip_search.gnip_search_api import GnipSearchAPI
 from gnip_search.gnip_search_api import QueryError as GNIPQueryError
 
+
 class Frequency:
     """
     Class collection for Frequency
@@ -28,9 +29,12 @@ class Frequency:
                           paged=True)
         timeline = None
         try:
-            timeline = g.query_api(self.query, self.sample, use_case="wordcount", start=self.start.strftime(self.DATE_FORMAT), end=self.end.strftime(self.DATE_FORMAT), csv_flag=False)
+            timeline = g.query_api(
+                self.query, self.sample, use_case="wordcount", start=self.start.strftime(
+                    self.DATE_FORMAT), end=self.end.strftime(
+                    self.DATE_FORMAT), csv_flag=False)
         except GNIPQueryError as e:
-            print(e);
+            print(e)
 
         result = g.freq.get_tokens(20)
         return result

@@ -1,9 +1,11 @@
 import json
 
+
 class Timeseries:
     """
     Class to produce timeseries data
     """
+
     def __init__(self, query, timeline, columns, total, xAxis=None):
         self.columns = columns
         self.query = query
@@ -47,8 +49,9 @@ class Timeseries:
         return xAxis
 
 if __name__ == "__main__":
-    ts = Timeseries(query="gareth",
-               timeline="""{"results": [{"count": 268477, "timePeriod": "201512220000"},  {"count": 316681, "timePeriod": "201512210000"}]}""",
-               columns=[],
-               total=0)
+    ts = Timeseries(
+        query="gareth",
+        timeline="""{"results": [{"count": 268477, "timePeriod": "201512220000"},  {"count": 316681, "timePeriod": "201512210000"}]}""",
+        columns=[],
+        total=0)
     print ts.columns
