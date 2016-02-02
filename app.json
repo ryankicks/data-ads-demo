@@ -1,7 +1,7 @@
 {
-	"name":"tweet-search",
+	"name":"data-ads-demo",
 	"description":"Sample code showing audience creation and ad targeting using Twitter Data (via Gnip) and Twitter Ads API.",
-	"repository":"https://github.com/garethpaul/tweet-search",
+	"repository":"https://github.com/ryankicks/data-ads-demo",
 	"addons": ["heroku-postgresql:hobby-dev"],
 	"keywords":[
 		"python",
