@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/garethpaul/data-ads-demo.svg?branch=master)](https://travis-ci.org/garethpaul/data-ads-demo)
+[![Build Status](https://travis-ci.org/ryankicks/data-ads-demo.svg?branch=master)](https://travis-ci.org/ryankicks/data-ads-demo)
 
 Audience Creation and Ad Targeting using Twitter Data (Gnip) and Ads API
 =================
@@ -10,7 +10,7 @@ as an audience via the TON API, and then allows creation of new Campaigns agains
 
 As always, when developing on top of the Twitter platform, you must abide by the [Developer Agreement & Policy](https://dev.twitter.com/overview/terms/agreement-and-policy).
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/garethpaul/tweet-search)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/ryankicks/data-ads-demo)
 
 
 Requirements
@@ -37,11 +37,11 @@ Getting Started
 
     `GNIP_SEARCH_ENDPOINT = 'YOUR_GNIP_FULL_ARCHIVE_SEARCH_ENDPOINT'`
 
-- To initialize your database, run the from the `tweet-search` directory:
+- To initialize your database, run the from the `data-ads-demo` directory:
 
   `python manage.py migrate --settings=app.settings_my`
 
-- To start the server, run the following from the `tweet-search` directory:
+- To start the server, run the following from the `data-ads-demo` directory:
 
   `fab start`
 
